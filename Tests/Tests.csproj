@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LibraryExtensions\DateTime.cs" />
     <Compile Include="LibraryExtensions\Helpers\EnumerableWalker.cs" />
     <Compile Include="LibraryExtensions\Helpers\SerializableDictionary.cs" />
     <Compile Include="LibraryExtensions\Helpers\XmlSerializersRepository.cs" />
