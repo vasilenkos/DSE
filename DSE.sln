@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryExtensions", "LibraryExtensions.csproj", "{C2C64870-AFAB-43E2-B393-04A923F13A0E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryExtensions", "LibraryExtensions\LibraryExtensions.csproj", "{C2C64870-AFAB-43E2-B393-04A923F13A0E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "..\Tests\Tests.csproj", "{72618AD0-3F4D-4046-BB76-ED1AF222D938}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{72618AD0-3F4D-4046-BB76-ED1AF222D938}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
