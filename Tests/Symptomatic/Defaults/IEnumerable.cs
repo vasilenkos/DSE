@@ -16,7 +16,11 @@ namespace DSE.Tests.Symptomatic
                 "",
                 "Hello",
                 "One more hello",
+                "One more hello, repeat",
+                "One more hello, repeat 2",
                 "2",
+                "22",
+                "222",
                 "-2",
                 "2.3",
                 @"Lorem ipsum dolor sit amet, consectetur adipisicing elit, " + 
