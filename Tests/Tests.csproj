@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="LibraryExtensions\DateTime.cs" />
     <Compile Include="LibraryExtensions\Dictionary.cs" />
+    <Compile Include="LibraryExtensions\Func.cs" />
     <Compile Include="LibraryExtensions\Helpers\EnumerableWalker.cs" />
     <Compile Include="LibraryExtensions\Helpers\SerializableDictionary.cs" />
     <Compile Include="LibraryExtensions\Helpers\TypeAnatomy.cs" />
