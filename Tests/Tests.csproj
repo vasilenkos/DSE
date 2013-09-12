@@ -52,6 +52,7 @@
     <Compile Include="LibraryExtensions\DateTime.cs" />
     <Compile Include="LibraryExtensions\Helpers\EnumerableWalker.cs" />
     <Compile Include="LibraryExtensions\Helpers\SerializableDictionary.cs" />
+    <Compile Include="LibraryExtensions\Helpers\TypeAnatomy.cs" />
     <Compile Include="LibraryExtensions\Helpers\XmlSerializersRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Symptomatic\Defaults\IEnumerable.cs" />
