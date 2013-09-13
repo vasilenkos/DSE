@@ -70,34 +70,64 @@ namespace DSE.Extensions
 
         public static IEnumerable<R> MapToFirst<T, R>(this IEnumerable<T> poSeq, Func<T, R> poFunc)
         {
-            if (poSeq.Count() > 0)
-                yield return poFunc(
-                    poSeq.First()
-                );
+            var loFunc = new Func<IEnumerable<T>, Func<T, R>, R>((s, f) =>
+            {
+                try
+                {
+                    return f(s.First());
+                }
+                catch (ArgumentNullException ex)
+                {
+                    throw new NullReferenceException("", ex);
+                }
+            });
+
+            yield return loFunc(poSeq, poFunc);
         }
 
         public static void ApplyToFirst<T>(this IEnumerable<T> poSeq, Action<T> poFunc)
         {
-            if (poSeq.Count() > 0)
+            try
+            {
                 poFunc(
                     poSeq.First()
                 );
+            }
+            catch (ArgumentNullException ex)
+            {
+                throw new NullReferenceException("", ex);
+            }
         }
 
         public static IEnumerable<R> MapToLast<T, R>(this IEnumerable<T> poSeq, Func<T, R> poFunc)
         {
-            if (poSeq.Count() > 0)
-                yield return poFunc(
-                    poSeq.Last()
-                );
+            var loFunc = new Func<IEnumerable<T>, Func<T, R>, R>((s, f) =>
+            {
+                try
+                {
+                    return f(s.Last());
+                }
+                catch (ArgumentNullException ex)
+                {
+                    throw new NullReferenceException("", ex);
+                }
+            });
+
+            yield return loFunc(poSeq, poFunc);
         }
 
         public static void ApplyToLast<T>(this IEnumerable<T> poSeq, Action<T> poFunc)
         {
-            if (poSeq.Count() > 0)
+            try
+            {
                 poFunc(
                     poSeq.Last()
                 );
+            }
+            catch (ArgumentNullException ex)
+            {
+                throw new NullReferenceException("", ex);
+            }
         }
 
         public static Action<A> Y<A>(Func<Action<A>, Action<A>> F) { return a => F(Y(F))(a); }
@@ -106,7 +136,7 @@ namespace DSE.Extensions
         {
             var loList = new List<T>();
 
-            Y<IEnumerable<T>>((f) => (items) => items.UseIfNotNull(_=>
+            Y<IEnumerable<T>>((f) => (items) => items.UseIfNotNull(_ =>
                 {
                     loList.AddRange(_.Where(poPredicate));
                     _.Apply(__ => f(poChildrenExtractor(__)));

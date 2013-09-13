@@ -35,7 +35,7 @@ namespace DSE.Tests.LibraryExtensions.Helpers
         [Test]
         public void StringsDemonstration()
         {
-            var loData = Defaults.IEnumerable.String;
+            var loData = Defaults.IEnumerable.Filled.String;
             var loContext = new _Context();
             var loWalker = new DSE.Extensions.EnumerableWalker<String, _Context>(loData, loContext);
             var lsTestValueOnBegin = "Begin";
