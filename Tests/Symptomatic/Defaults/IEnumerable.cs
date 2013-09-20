@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace DSE.Tests.Symptomatic
 {
-    public static class Defaults
+    public static partial class Defaults
     {
         public static class IEnumerable
         {

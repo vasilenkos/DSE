@@ -59,6 +59,7 @@
     <Compile Include="LibraryExtensions\IEnumerable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Symptomatic\Defaults\IEnumerable.cs" />
+    <Compile Include="Symptomatic\Defaults\Tree.cs" />
     <Compile Include="Symptomatic\SimpleTestCase.cs" />
   </ItemGroup>
   <ItemGroup>

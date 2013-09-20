@@ -171,10 +171,10 @@ namespace DSE.Extensions
             var loList = new List<T>();
 
             Y<IEnumerable<T>>((f) => (items) => items.UseIfNotNull(_ =>
-                {
-                    loList.AddRange(_.Where(poPredicate));
-                    _.Apply(__ => f(poChildrenExtractor(__)));
-                })
+            {
+                loList.AddRange(_.Where(poPredicate));
+                _.Apply(__ => f(poChildrenExtractor(__)));
+            })
             )(poSource);
 
             return loList;

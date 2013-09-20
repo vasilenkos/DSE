@@ -252,5 +252,32 @@ namespace DSE.Tests.LibraryExtensions
             });
         }
 
+        [Test]
+        public void DoTestTraverseDown()
+        {
+            Assert.IsNotNull(Symptomatic.Defaults.Tree.Default);
+
+            var loFlatten = new object[] { Symptomatic.Defaults.Tree.Default }
+                .TraverseDown(
+                    _ =>
+                    {
+                        if (_ is Symptomatic.Defaults.Tree._Tree)
+                            return new object[] { (_ as Symptomatic.Defaults.Tree._Tree).Root };
+                        if (_ is Symptomatic.Defaults.Tree._Root)
+                            return (_ as Symptomatic.Defaults.Tree._Root).UseIfNotNull(new object[] { }, __ => __.Branches.Cast<object>().ToArray());
+                        if (_ is Symptomatic.Defaults.Tree._Branch)
+                            return (_ as Symptomatic.Defaults.Tree._Branch).UseIfNotNull(new object[] { }, __ => __.Leaves.Cast<object>().ToArray());
+
+                        return new object[] { };
+                    },
+                    _ => _ is Symptomatic.Defaults.Tree._Leaf
+                )
+                .Cast<Symptomatic.Defaults.Tree._Leaf>()
+                .ToArray();
+
+            Assert.IsNotNull(loFlatten);
+            Assert.AreEqual(loFlatten.Length, 33);
+            Assert.AreEqual(Math.Round(loFlatten.Average(_ => _.Square), 2), 2.45);
+        }
     }
 }
