@@ -173,6 +173,35 @@ namespace DSE.Tests.LibraryExtensions
         }
 
         [Test]
+        public void DoTestApplyToRestAfterFirst()
+        {
+            var lnFetchedValue = 0;
+
+            Defaults.IEnumerable.Filled.Int32.ApplyToRestAfterFirst(_ => { lnFetchedValue += _; });
+
+            Assert.AreEqual(lnFetchedValue, 0);
+
+            // Let's check lazy conversion
+            lnFetchedValue = 0;
+            Defaults.IEnumerable.Filled.Int32.ApplyToRestAfterFirst(_ => { lnFetchedValue += _; });
+
+            Assert.AreEqual(lnFetchedValue, 0);
+
+            Assert.Catch<NullReferenceException>(() =>
+            {
+                Defaults.IEnumerable.Nulled.Int32.ApplyToRestAfterFirst(_ => { });
+            });
+            Assert.Catch<NullReferenceException>(() =>
+            {
+                Defaults.IEnumerable.Filled.Int32.ApplyToRestAfterFirst(null);
+            });
+            Assert.Catch<NullReferenceException>(() =>
+            {
+                Defaults.IEnumerable.Nulled.Int32.ApplyToRestAfterFirst(null);
+            });
+        }
+
+        [Test]
         public void DoTestApplyToLast()
         {
             var lnFetchedValue = 0;
@@ -193,5 +222,35 @@ namespace DSE.Tests.LibraryExtensions
                 Defaults.IEnumerable.Nulled.Int32.ApplyToLast(null);
             });
         }
+
+        [Test]
+        public void DoTestApplyToRestBeforeLast()
+        {
+            var lnFetchedValue = 0;
+
+            Defaults.IEnumerable.Filled.Int32.ApplyToRestBeforeLast(_ => { lnFetchedValue += _; });
+
+            Assert.AreEqual(lnFetchedValue, -199);
+
+            // Let's check lazy conversion
+            lnFetchedValue = 0;
+            Defaults.IEnumerable.Filled.Int32.ApplyToRestBeforeLast(_ => { lnFetchedValue += _; });
+
+            Assert.AreEqual(lnFetchedValue, -199);
+
+            Assert.Catch<NullReferenceException>(() =>
+            {
+                Defaults.IEnumerable.Nulled.Int32.ApplyToRestBeforeLast(_ => { });
+            });
+            Assert.Catch<NullReferenceException>(() =>
+            {
+                Defaults.IEnumerable.Filled.Int32.ApplyToRestBeforeLast(null);
+            });
+            Assert.Catch<NullReferenceException>(() =>
+            {
+                Defaults.IEnumerable.Nulled.Int32.ApplyToRestBeforeLast(null);
+            });
+        }
+
     }
 }

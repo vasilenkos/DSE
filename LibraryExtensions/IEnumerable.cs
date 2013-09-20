@@ -84,7 +84,7 @@ namespace DSE.Extensions
 
             yield return loFunc(poSeq, poFunc);
         }
-
+        
         public static void ApplyToFirst<T>(this IEnumerable<T> poSeq, Action<T> poFunc)
         {
             try
@@ -97,6 +97,18 @@ namespace DSE.Extensions
             {
                 throw new NullReferenceException("", ex);
             }
+        }
+
+        public static void ApplyToRestAfterFirst<T>(this IEnumerable<T> poSeq, Action<T> poFunc)
+        {
+            poSeq
+                .Apply((_, n) =>
+                {
+                    if (n > 0)
+                    {
+                        poFunc(_);
+                    }
+                });
         }
 
         public static IEnumerable<R> MapToLast<T, R>(this IEnumerable<T> poSeq, Func<T, R> poFunc)
@@ -124,6 +136,28 @@ namespace DSE.Extensions
                     poSeq.Last()
                 );
             }
+            catch (ArgumentNullException ex)
+            {
+                throw new NullReferenceException("", ex);
+            }
+        }
+
+        public static void ApplyToRestBeforeLast<T>(this IEnumerable<T> poSeq, Action<T> poFunc)
+        {
+            try
+            {
+                var lnCount = poSeq.Count() - 1;
+
+                poSeq
+                    .Apply((_, n) =>
+                    {
+                        if (n < lnCount)
+                        {
+                            poFunc(_);
+                        }
+                    });
+            }
+
             catch (ArgumentNullException ex)
             {
                 throw new NullReferenceException("", ex);
