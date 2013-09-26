@@ -279,5 +279,31 @@ namespace DSE.Tests.LibraryExtensions
             Assert.AreEqual(loFlatten.Length, 33);
             Assert.AreEqual(Math.Round(loFlatten.Average(_ => _.Square), 2), 2.45);
         }
+
+        [Test]
+        public void DoTestTraverseUp()
+        {
+            var loItems = Symptomatic.Defaults.Hierarchy.Default;
+
+            Assert.IsNotNull(loItems);
+
+            var loLowestItem = loItems.Where(_ => _.ID == "LeftBottom").First();
+
+            Assert.IsNotNull(loLowestItem);
+
+            var loHistory = loLowestItem
+                .TraverseUp(
+                    _ => String.IsNullOrEmpty(_.ParentID) ? null : loItems.Where(__ => __.ID == _.ParentID).First(),
+                    _ => _ != null
+                )
+                .ToArray();
+
+
+            Assert.IsNotNull(loHistory);
+            Assert.AreEqual(loHistory.Length, 3);
+            Assert.AreEqual(loHistory[0].ID, "LeftBottom");
+            Assert.AreEqual(loHistory[1].ID, "Left");
+            Assert.AreEqual(loHistory[2].ID, "Root");
+        }
     }
 }
