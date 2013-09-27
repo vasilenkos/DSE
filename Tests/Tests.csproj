@@ -58,6 +58,7 @@
     <Compile Include="LibraryExtensions\Helpers\XmlSerializersRepository.cs" />
     <Compile Include="LibraryExtensions\IEnumerable.cs" />
     <Compile Include="LibraryExtensions\Numbers.cs" />
+    <Compile Include="LibraryExtensions\Object.cs" />
     <Compile Include="LibraryExtensions\Sorter.cs" />
     <Compile Include="LibraryExtensions\String.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
