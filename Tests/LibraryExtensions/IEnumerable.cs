@@ -298,7 +298,6 @@ namespace DSE.Tests.LibraryExtensions
                 )
                 .ToArray();
 
-
             Assert.IsNotNull(loHistory);
             Assert.AreEqual(loHistory.Length, 3);
             Assert.AreEqual(loHistory[0].ID, "LeftBottom");

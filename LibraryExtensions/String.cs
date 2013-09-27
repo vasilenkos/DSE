@@ -13,64 +13,65 @@ namespace DSE.Extensions
     {
         public static String ToTitleCase(this String poString)
         {
-            return poString == null
-                ? poString
-                : System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(poString.ToLower());
+            return
+                String.IsNullOrEmpty(poString)
+                    ? poString
+                    : System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(poString.ToLower());
         }
 
         public static String ToFirstLetterUpperCase(this String poString)
         {
-            if (String.IsNullOrEmpty(poString))
+            if (!String.IsNullOrEmpty(poString))
             {
-                return poString;
+                if (poString.Length > 0)
+                {
+                    var loStringBuilder = new StringBuilder();
+                    loStringBuilder.Append(char.ToUpper(poString[0]) + poString.Substring(1, poString.Length - 1));
+
+                    return loStringBuilder.ToString(); ;
+                }
             }
 
-            if (poString.Length > 0)
-            {
-                StringBuilder sb = new StringBuilder();
-                sb.Append(char.ToUpper(poString[0]) + poString.Substring(1, poString.Length - 1));
-                return sb.ToString(); ;
-            }
-
-            return System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(poString.ToLower());
+            return poString;
         }
 
         public static String GetFirstLetter(this String poString)
         {
-            if (String.IsNullOrEmpty(poString))
-            {
-                return poString;
-            }
-
-            return poString[0].ToString();
+            return
+                String.IsNullOrEmpty(poString)
+                    ? poString
+                    : poString[0].ToString();
         }
 
-        public static String GetFirstLetterAndAppendIfNotEmpty(this String poString, String psAppendix)
+        public static String GetFirstLetterSuffixedIfNotEmpty(this String poString, String psAppendix)
         {
             var loResult = poString.GetFirstLetter();
 
-            if (!String.IsNullOrEmpty(loResult))
-            {
-                return loResult + psAppendix;
-            }
-
-            return loResult;
+            return
+                String.IsNullOrEmpty(loResult)
+                    ? loResult
+                    : loResult + psAppendix;
         }
 
         private static Regex _oHTMLRegex = new Regex("<.*?>", RegexOptions.Compiled);
+
         public static String StripHTMLTags(this String poSource)
         {
-            return _oHTMLRegex.Replace(poSource, String.Empty);
+            return String.IsNullOrEmpty(poSource)
+                ? poSource
+                : _oHTMLRegex.Replace(poSource, String.Empty);
         }
 
         public static String Join(this String[] paStrings, String psSeparator)
         {
-            return String.Join(psSeparator, paStrings);
+            try { return String.Join(psSeparator, paStrings); }
+            catch (ArgumentNullException ex) { throw new NullReferenceException("", ex); }
         }
 
         public static String JoinIf(this String[] paStrings, Func<String, bool> poPredicate, String psSeparator)
         {
-            return String.Join(psSeparator, paStrings.Where(poPredicate).ToArray());
+            try { return String.Join(psSeparator, paStrings.Where(poPredicate).ToArray()); }
+            catch (ArgumentNullException ex) { throw new NullReferenceException("", ex); }
         }
 
         public static String JoinNotNullOrEmpty(this String[] paStrings, String psSeparator)
@@ -98,86 +99,5 @@ namespace DSE.Extensions
 
             return new string(loDestinationChars);
         }
-
-        public static String ToNameAndSurnameCase(this String poString)
-        {
-            if (String.IsNullOrEmpty(poString))
-            {
-                return poString;
-            }
-            else
-            {
-                char[] chars = poString.Trim().ToCharArray();
-                char LastCharacter = ' ';
-                String ResValue = "";
-                Boolean NeedUpper = true;
-                foreach (char character in chars)
-                {
-                    if (!(((character == ' ') || (character == '-')) && (character == LastCharacter)))
-                    {
-                        ResValue += Char.IsLower(character) ? (NeedUpper ? character.ToString().ToUpper() : character.ToString()) : (NeedUpper ? character.ToString() : character.ToString().ToLower());
-                    }
-                    if ((character == ' ') || (character == '-'))
-                        NeedUpper = true;
-                    else NeedUpper = false;
-                    LastCharacter = character;
-                }
-                return ResValue;
-            }
-        }
-
-        public static String ToPatronymicCase(this String poString)
-        {
-            if (String.IsNullOrEmpty(poString))
-            {
-                return null;
-            }
-            else
-            {
-                char[] chars = poString.Trim().ToCharArray();
-                char LastCharacter = ' ';
-                int i = 0;
-                String ResValue = "";
-                Boolean NeedUpper = true;
-                foreach (char character in chars)
-                {
-                    if ((character == 'о') || (character == 'О'))
-                    {
-                        if (chars.Length - 4 >= i)
-                        {
-                            if (((chars[i + 1] == 'г') || (chars[i + 1] == 'Г')) &&
-                                ((chars[i + 2] == 'л') || (chars[i + 2] == 'Л')) &&
-                                ((chars[i + 3] == 'ы') || (chars[i + 3] == 'Ы')))
-                            {
-                                NeedUpper = false;
-                            }
-                        }
-                    }
-                    if ((character == 'к') || (character == 'К'))
-                    {
-                        if (chars.Length - 4 >= i)
-                        {
-                            if (((chars[i + 1] == 'ы') || (chars[i + 1] == 'Ы')) &&
-                                ((chars[i + 2] == 'з') || (chars[i + 2] == 'З')) &&
-                                ((chars[i + 3] == 'ы') || (chars[i + 3] == 'Ы')))
-                            {
-                                NeedUpper = false;
-                            }
-                        }
-                    }
-                    if (!(((character == ' ') || (character == '-')) && (character == LastCharacter)))
-                    {
-                        ResValue += Char.IsLower(character) ? (NeedUpper ? character.ToString().ToUpper() : character.ToString()) : (NeedUpper ? character.ToString() : character.ToString().ToLower());
-                    }
-                    if ((character == ' ') || (character == '-'))
-                        NeedUpper = true;
-                    else NeedUpper = false;
-                    LastCharacter = character;
-                    i++;
-                }
-                return ResValue;
-            }
-        }
-
     }
 }
