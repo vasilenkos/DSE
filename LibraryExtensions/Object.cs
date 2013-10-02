@@ -68,7 +68,6 @@ namespace DSE.Extensions
         {
             return (false
                 || (poFunctor == null)
-                || (poObject == null)
                 || (poPredicate == null)
             )
                 ? null
