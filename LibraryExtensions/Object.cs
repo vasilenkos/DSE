@@ -151,9 +151,7 @@ namespace DSE.Extensions
 
         #endregion
 
-        #region Switch/case/default
-
-        #region Void switch
+        #region Switch
 
         public class _Switch<T>
         {
@@ -212,7 +210,7 @@ namespace DSE.Extensions
 
         public static _Switch<T> BreakCase<T>(this _Switch<T> poSwitch, Func<T, Boolean> poPredicate, Action poAction)
         {
-            return Case(poSwitch, poPredicate, o => poAction());
+            return poSwitch.BreakCase(poPredicate, o => poAction());
         }
 
         public static _Switch<T> BreakCase<T>(this _Switch<T> poSwitch, Func<T, Boolean> poPredicate, Action<T> poAction)
@@ -245,7 +243,7 @@ namespace DSE.Extensions
 
         #endregion
 
-        #region Data switch
+        #region Data match
 
         public class _Match<T, P>
         {
@@ -331,8 +329,6 @@ namespace DSE.Extensions
 
             return poSwitch.DefaultValue;
         }
-        #endregion
-
         #endregion
 
         public static TypeAnatomy GetTypeAnatomy<T>(this T poType) where T : Type

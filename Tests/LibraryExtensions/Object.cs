@@ -141,5 +141,207 @@ namespace DSE.Tests.LibraryExtensions
             Assert.IsNull(loNullObject.UseIf(null, null, (Func<Defaults.Class.Person, Defaults.Class.Person>)null));
             Assert.AreEqual(loNotNullObject1, loNullObject.UseIf(null, loNotNullObject1, (Func<Defaults.Class.Person, Defaults.Class.Person>)null));
         }
+
+        [Test]
+        public void DoTestCastAndUseIfNotNullAction()
+        {
+            var loFreelancer = Defaults.Class.DefaultFreelancer;
+
+            loFreelancer.CastAndUseIfNotNull((Defaults.Class.Scientist _) => { Assert.Fail(); });
+            loFreelancer.CastAndUseIfNotNull((Defaults.Class.Person _) => { Assert.IsNotNull(_); Assert.AreEqual(loFreelancer.FirstName, _.FirstName); });
+            Assert.Catch<NullReferenceException>(() =>
+            {
+                loFreelancer.CastAndUseIfNotNull((Action<Defaults.Class.Person>)null);
+            });
+        }
+
+        [Test]
+        public void DoTestCastAndUseIfNotNullDefaultFunctor()
+        {
+            var loFreelancer = Defaults.Class.DefaultFreelancer;
+
+            Assert.AreEqual(
+                Defaults.Class.DefaultScientist,
+                loFreelancer.CastAndUseIfNotNull(Defaults.Class.DefaultScientist, (Defaults.Class.Scientist _) => { Assert.Fail(); return _; })
+            );
+
+            Assert.AreEqual(
+                loFreelancer,
+                loFreelancer.CastAndUseIfNotNull(Defaults.Class.DefaultPerson1, (Defaults.Class.Person _) =>
+                {
+                    Assert.IsNotNull(_);
+                    Assert.AreEqual(loFreelancer.FirstName, _.FirstName);
+
+                    return _;
+                })
+            );
+
+            Assert.Catch<NullReferenceException>(() =>
+            {
+                loFreelancer.CastAndUseIfNotNull(Defaults.Class.DefaultPerson1, (Func<Defaults.Class.Person, Defaults.Class.Person>)null);
+            });
+        }
+
+        [Test]
+        public void DoTestIfPredicateValue()
+        {
+            Assert.AreEqual(4, 3.If(_ => _ == 3, 4));
+            Assert.AreEqual(3, 3.If(_ => _ != 3, 4));
+            Assert.AreEqual(3, 3.If(null, 4));
+        }
+
+        [Test]
+        public void DoTestIfPredicateValueElseValue()
+        {
+            Assert.AreEqual(4, 3.If(_ => _ == 3, 4, 5));
+            Assert.AreEqual(5, 3.If(_ => _ != 3, 4, 5));
+            Assert.AreEqual(3, 3.If(null, 4, 5));
+        }
+
+        [Test]
+        public void DoTestSwitch()
+        {
+            var lnPassed = 0;
+
+            // Fall-through mode without breaks
+            // In the end we'll check if there are valid entries for asserts
+
+            lnPassed = 0;
+
+            3.Switch()
+                // Fail section
+                .Case(4, () => Assert.Fail())
+                .Case(4, (_) => Assert.Fail())
+                .Case(_ => _ == 4, () => Assert.Fail())
+                .Case(_ => _ == 4, (_) => Assert.Fail())
+                // Win section
+                .Case(3, () => { lnPassed++; })
+                .Case(3, (_) => { Assert.AreEqual(3, _); lnPassed++; })
+                .Case(_ => _ == 3, () => { lnPassed++; })
+                .Case(_ => _ == 3, (_) => { Assert.AreEqual(3, _); lnPassed++; })
+                .Default(_ => { Assert.AreEqual(3, _); lnPassed++; });
+
+            Assert.AreEqual(5, lnPassed);
+
+            // Breaks mode
+
+            lnPassed = 0;
+
+            3.Switch()
+                .BreakCase(3, () => { lnPassed++; })
+                .BreakCase(3, (_) => { Assert.Fail(); })
+                .BreakCase(_ => _ == 3, () => { Assert.Fail(); })
+                .BreakCase(_ => _ == 3, (_) => { Assert.Fail(); })
+                .Case(3, () => { Assert.Fail(); })
+                .Default(_ => Assert.Fail());
+
+            Assert.AreEqual(1, lnPassed);
+
+            lnPassed = 0;
+
+            3.Switch()
+                .BreakCase(3, (_) => { lnPassed++; })
+                .BreakCase(_ => _ == 3, () => { Assert.Fail(); })
+                .BreakCase(_ => _ == 3, (_) => { Assert.Fail(); })
+                .BreakCase(3, () => { Assert.Fail(); })
+                .Case(3, () => { Assert.Fail(); })
+                .Default(_ => Assert.Fail());
+
+            Assert.AreEqual(1, lnPassed);
+
+            lnPassed = 0;
+
+            3.Switch()
+                .BreakCase(_ => _ == 3, () => { lnPassed++; })
+                .BreakCase(_ => _ == 3, (_) => { Assert.Fail(); })
+                .BreakCase(3, () => { Assert.Fail(); })
+                .BreakCase(3, (_) => { Assert.Fail(); })
+                .Case(3, () => { Assert.Fail(); })
+                .Default(_ => Assert.Fail());
+
+            Assert.AreEqual(1, lnPassed);
+
+            lnPassed = 0;
+
+            3.Switch()
+                .BreakCase(_ => _ == 3, (_) => { lnPassed++; })
+                .BreakCase(3, () => { Assert.Fail(); })
+                .BreakCase(3, (_) => { Assert.Fail(); })
+                .BreakCase(_ => _ == 3, () => { Assert.Fail(); })
+                .Case(3, () => { Assert.Fail(); })
+                .Default(_ => Assert.Fail());
+
+            Assert.AreEqual(1, lnPassed);
+        }
+
+        [Test]
+        public void DoTestMatch()
+        {
+            var lsValue = String.Empty;
+
+            lsValue =
+                3.Match("3")
+                    .Case(3, "C3")
+                    .Case(_ => _ == 3, "C3P")
+                    .Case(3, _ => "C3F")
+                    .Case(_ => _ == 3, _ => "C3PF")
+                .EndMatch();
+
+            Assert.AreEqual("C3", lsValue);
+
+            lsValue =
+                3.Match("3")
+                    .Case(_ => _ == 3, "C3P")
+                    .Case(3, _ => "C3F")
+                    .Case(_ => _ == 3, _ => "C3PF")
+                    .Case(3, "C3P")
+                .EndMatch();
+
+            Assert.AreEqual("C3P", lsValue);
+
+            lsValue =
+                3.Match("3")
+                    .Case(3, _ => "C3F")
+                    .Case(_ => _ == 3, _ => "C3PF")
+                    .Case(3, "C3")
+                    .Case(_ => _ == 3, "C3P")
+                .EndMatch();
+
+            Assert.AreEqual("C3F", lsValue);
+
+            lsValue =
+                3.Match("3")
+                    .Case(_ => _ == 3, _ => "C3PF")
+                    .Case(3, "C3")
+                    .Case(_ => _ == 3, "C3P")
+                    .Case(3, _ => "C3F")
+                .EndMatch();
+
+            Assert.AreEqual("C3PF", lsValue);
+
+            lsValue =
+                3.Match("3")
+                .EndMatch();
+
+            Assert.AreEqual("3", lsValue);
+
+            lsValue =
+                3.Match("3")
+                    .Case(4, "C4")
+                .EndMatch();
+
+            lsValue =
+                3.Match("3")
+                    .Case(4, "C4")
+                .EndMatch((_,d) =>
+                {
+                    Assert.AreEqual(3, _);
+                    Assert.AreEqual("3", d);
+
+                    return "EM3";
+                });
+
+            Assert.AreEqual("EM3", lsValue);
+        }
     }
 }
