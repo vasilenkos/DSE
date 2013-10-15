@@ -343,5 +343,31 @@ namespace DSE.Tests.LibraryExtensions
 
             Assert.AreEqual("EM3", lsValue);
         }
+
+        [Test]
+        public void DoTestGetTypeAnatomy()
+        {
+            var loInt32TypeAnatomy = ((Int32)10).GetType().GetTypeAnatomy();
+            var loGenericListTypeAnatomy = (new List<Int32>()).GetType().GetTypeAnatomy();
+
+            Assert.IsNotNull(loInt32TypeAnatomy.TypeParameters);
+            Assert.AreEqual(0, loInt32TypeAnatomy.TypeParameters.Length);
+            Assert.AreEqual("System.Int32", loInt32TypeAnatomy.TypeName);
+            Assert.IsNotNullOrEmpty(loInt32TypeAnatomy.TypeAssembly);
+
+            Assert.IsNotNull(loGenericListTypeAnatomy.TypeParameters);
+            Assert.AreEqual(1, loGenericListTypeAnatomy.TypeParameters.Length);
+            Assert.AreEqual("System.Collections.Generic.List`1", loGenericListTypeAnatomy.TypeName);
+            Assert.IsNotNullOrEmpty(loGenericListTypeAnatomy.TypeAssembly);
+            Assert.IsNotNull(loGenericListTypeAnatomy.TypeParameters[0]);
+            Assert.IsNotNull(loGenericListTypeAnatomy.TypeParameters[0]);
+            Assert.AreEqual(0, loGenericListTypeAnatomy.TypeParameters[0].TypeParameters.Length);
+            Assert.AreEqual("System.Int32", loGenericListTypeAnatomy.TypeParameters[0].TypeName);
+            Assert.IsNotNullOrEmpty(loGenericListTypeAnatomy.TypeParameters[0].TypeAssembly);
+
+            Console.Error.WriteLine(loGenericListTypeAnatomy.TypeAssembly);
+            Console.Error.WriteLine(loGenericListTypeAnatomy.TypeName);
+            Console.Error.WriteLine(loGenericListTypeAnatomy.TypeParameters);
+        }
     }
 }
