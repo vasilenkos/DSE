@@ -343,6 +343,21 @@ namespace DSE.Tests.LibraryExtensions
 
             Assert.AreEqual("EM3", lsValue);
         }
+    }
+
+    public class _Serialization : Symptomatic.SimpleTestCase
+    {
+        public override void BeginTestCase()
+        {
+            base.BeginTestCase();
+            XmlSerializersRepository.Clear();
+        }
+
+        public override void EndTestCase()
+        {
+            XmlSerializersRepository.Clear();
+            base.EndTestCase();
+        }
 
         [Test]
         public void DoTestGetTypeAnatomy()
@@ -364,10 +379,35 @@ namespace DSE.Tests.LibraryExtensions
             Assert.AreEqual(0, loGenericListTypeAnatomy.TypeParameters[0].TypeParameters.Length);
             Assert.AreEqual("System.Int32", loGenericListTypeAnatomy.TypeParameters[0].TypeName);
             Assert.IsNotNullOrEmpty(loGenericListTypeAnatomy.TypeParameters[0].TypeAssembly);
+        }
 
-            Console.Error.WriteLine(loGenericListTypeAnatomy.TypeAssembly);
-            Console.Error.WriteLine(loGenericListTypeAnatomy.TypeName);
-            Console.Error.WriteLine(loGenericListTypeAnatomy.TypeParameters);
+        [Serializable]
+        public class Shmockup
+        {
+            public String Shmock;
+            public String Shmick;
+
+            public override bool Equals(object obj)
+            {
+                return obj
+                    .CastAndUseIfNotNull(
+                        false,
+                        (Shmockup _) =>
+                            true
+                            && (_.Shmock == this.Shmock)
+                            && (_.Shmick == this.Shmick)
+                    );
+            }
+        }
+
+        [Test]
+        public void DoTestSerializeAndDeserialize()
+        {
+            var loObject = new Shmockup() { Shmock = "Shmock", Shmick = "Shmick" };
+            var loSerializedByteStream = loObject.Serialize();
+            var loDeserializedObject = loSerializedByteStream.Deserialize<Shmockup>();
+
+            Assert.AreEqual(loObject, loDeserializedObject);
         }
     }
 }

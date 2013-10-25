@@ -14,6 +14,11 @@ namespace DSE.Extensions
     {
         protected static Dictionary<Type, XmlSerializer> _oRepository = new Dictionary<Type, XmlSerializer>();
 
+        public static void Clear()
+        {
+            _oRepository.Clear();
+        }
+
         public static XmlSerializer Acquire(Type poType)
         {
             return _oRepository.ContainsKey(poType)
