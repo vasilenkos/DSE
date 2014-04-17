@@ -87,6 +87,7 @@ namespace DSE.Extensions
 
 			return this;
 		}
+
 		#region IComparer<T> Members
 		Int32 IComparer<T>.Compare (T x, T y)
 		{

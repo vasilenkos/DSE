@@ -14,7 +14,7 @@ namespace DSE.Tests.LibraryExtensions
         [Test]
         public void DoTestSorter()
         {
-			#if(!__MonoCS__)
+            #if(!__MonoCS__)
             var loSequence = new List<Int32>() { 0, 477, 110, -36, 117, 252, -82, 2066 };
 
             loSequence.Sort(
@@ -53,7 +53,7 @@ namespace DSE.Tests.LibraryExtensions
             );
 
             CollectionAssert.AreEqual(new List<Int32>() { 110, 117, 252, 477, 2066, 0, -36, -82 }, loSequence);
-			#endif
+            #endif
         }
     }
 }
