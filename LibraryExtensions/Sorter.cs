@@ -25,7 +25,7 @@ namespace DSE.Extensions
 
 		private int _CompareTwoBooleans (Boolean pbFirst, Boolean pbSecond)
 		{
-			return (pbFirst && pbSecond) ? 0 : (pbFirst ? 1 : -1);
+			return (pbFirst == pbSecond) ? 0 : (pbFirst ? 1 : -1);
 		}
 
 		private Int32 _InvertResult (Int32 pnResult)
